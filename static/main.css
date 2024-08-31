@@ -1,0 +1,177 @@
+/* General page styles */
+body {
+    background-color: #1c1c2b;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Allow vertical scrolling within the container */
+    max-height: 90vh; /* Prevent container from exceeding viewport height */
+    background-color: #2a2a3b;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+/* Header styles */
+h1.title {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+input[type="number"],
+select,
+button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background-color: #2a2a3b;
+    color: #fff;
+}
+
+button {
+    background-color: #32cd32;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+button:hover {
+    background-color: #28a745;
+}
+
+/* Macro result display */
+.macro-results, .daily-summary, .macro-chart {
+    background-color: #333344;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.macro-results p, .daily-summary p {
+    margin: 5px 0;
+}
+
+/* Meal planning section */
+.meal-planner {
+    background-color: #222233;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.meal-planner h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Meal Tracker */
+.meal-tracker {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.days-of-week {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.day-button {
+    width: calc(14.28% - 10px);
+    margin: 5px;
+    padding: 10px;
+    background-color: #444455;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.day-button:hover {
+    background-color: #555566;
+}
+
+/* Button */
+.btn-clear {
+    background-color: #ff6347;
+}
+
+.btn-clear:hover {
+    background-color: #ff4500;
+}
+
+/* Meal list styles */
+.meal-list {
+    background-color: #222233;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    list-style-type: none;
+}
+
+.meal-list li {
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+/* Chart styles */
+#macroChart {
+    width: 100%;
+    height: 300px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    h1.title {
+        font-size: 1.25rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    .day-button {
+        width: calc(33.33% - 10px);
+    }
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macro Diet Calculator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+    <!-- Google OAuth 2.0 Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="bg-dark text-white">
+    <div class="container mt-5">
+        <h1 class="text-center">Macro Diet Calculator</h1>
+
+        <!-- Google Sign-In section -->
+        {% if session['profile'] %}
+            <p>Welcome, {{ session['profile']['name'] }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+        {% else %}
+            <section class="google-signin mt-5">
+                <h2>Sign in with Google</h2>
+                <div id="g_id_onload"
+                     data-client_id="{{ GOOGLE_CLIENT_ID }}"
+                     data-login_uri="http://localhost:8000/auth/callback"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-size="large"
+                     data-theme="outline"
+                     data-text="sign_in_with"
+                     data-shape="rectangular"
+                     data-logo_alignment="left">
+                </div>
+            </section>
+            <p>Please <a href="{{ url_for('login') }}">log in</a> to access the Macro Diet Calculator.</p>
+        {% endif %}
+
+        <!-- Macro Calculator Form -->
+        {% if session['profile'] %}
+            <section class="macro-calculator mt-4">
+                <form id="macro-form">
+                    <div class="form-group">
+                        <label for="weight">Weight (lbs):</label>
+                        <input type="number" id="weight" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="height-ft">Height (ft):</label>
+                        <input type="number" id="height-ft" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="height-in">Height (in):</label>
+                        <input type="number" id="height-in" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age:</label>
+                        <input type="number" id="age" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <select id="gender" class="form-control" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="activity-level">Activity Level:</label>
+                        <select id="activity-level" class="form-control" required>
+                            <option value="1.2">Sedentary</option>
+                            <option value="1.375">Lightly Active</option>
+                            <option value="1.55">Moderately Active</option>
+                            <option value="1.725">Very Active</option>
+                            <option value="1.9">Super Active</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Calculate Macros</button>
+                </form>
+            </section>
+
+            <!-- Macro Results -->
+            <section class="macro-results mt-5">
+                <h2>Your Daily Macro Goals</h2>
+                <p>Total Calories: <span id="total-calories">0</span> kcal/day</p>
+                <p>Protein: <span id="goal-protein">0</span> g/day</p>
+                <p>Fat: <span id="goal-fat">0</span> g/day</p>
+                <p>Carbs: <span id="goal-carbs">0</span> g/day</p>
+            </section>
+
+            <!-- Meal Planner -->
+            <section class="meal-planner mt-5">
+                <h2>Plan Your Meal</h2>
+                <div class="form-group">
+                    <label for="protein-dropdown">Choose Protein:</label>
+                    <select id="protein-dropdown" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="fat-dropdown">Choose Fat:</label>
+                    <select id="fat-dropdown" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="carbs-dropdown">Choose Carbs:</label>
+                    <select id="carbs-dropdown" class="form-control"></select>
+                </div>
+                <button id="add-meal" class="btn btn-success btn-block">Add to Meal</button>
+                <button id="clear-meal" class="btn btn-danger btn-block mt-2">Clear Meal</button>
+            </section>
+
+            <!-- Meal Tracker -->
+            <section class="meal-tracker mt-5">
+                <h2>Weekly Meal Tracker</h2>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="monday" autocomplete="off"> Monday
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="tuesday" autocomplete="off"> Tuesday
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="wednesday" autocomplete="off"> Wednesday
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="thursday" autocomplete="off"> Thursday
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="friday" autocomplete="off"> Friday
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="saturday" autocomplete="off"> Saturday
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="sunday" autocomplete="off"> Sunday
+                    </label>
+                </div>
+                <ul id="meal-list" class="list-group mt-3"></ul>
+            </section>
+
+            <!-- Daily Summary -->
+            <section class="daily-summary mt-5">
+                <h2>Daily Summary</h2>
+                <p>Protein: <span id="summary-protein">0</span> g / <span id="goal-protein-summary">0</span> g</p>
+                <p>Fat: <span id="summary-fat">0</span> g / <span id="goal-fat-summary">0</span> g</p>
+                <p>Carbs: <span id="summary-carbs">0</span> g / <span id="goal-carbs-summary">0</span> g</p>
+            </section>
+
+            <!-- Macronutrients Chart -->
+            <section class="macro-chart mt-5">
+                <h2>Macronutrients Chart</h2>
+                <canvas id="macroChart"></canvas>
+            </section>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

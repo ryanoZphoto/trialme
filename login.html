@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Macro Diet Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="dark-theme">
+    <div class="container">
+        <section class="auth-section login-section">
+            <h1 class="title">Login to Your Account</h1>
+            <div id="g_id_onload"
+                 data-client_id="{{ GOOGLE_CLIENT_ID }}"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-login_uri="http://localhost:8000/auth/callback"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="filled_black"
+                 data-text="sign_in_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+            <p>Don't have an account? <a href="#" id="show-signup">Sign up here</a></p>
+        </section>
+
+        <section class="auth-section signup-section hidden">
+            <h1 class="title">Create a New Account</h1>
+            <form id="signup-form" class="auth-form" action="{{ url_for('signup') }}" method="POST">
+                <div class="form-group">
+                    <label for="signup-username">Username:</label>
+                    <input type="text" id="signup-username" name="signup-username" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password:</label>
+                    <input type="password" id="signup-password" name="signup-password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password:</label>
+                    <input type="password" id="signup-confirm-password" name="signup-confirm-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <p>Already have an account? <a href="#" id="show-login">Login here</a></p>
+            </form>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='auth.js') }}"></script>
+    <script>
+        document.getElementById('show-signup').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.querySelector('.login-section').classList.add('hidden');
+            document.querySelector('.signup-section').classList.remove('hidden');
+        });
+
+        document.getElementById('show-login').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.querySelector('.signup-section').classList.add('hidden');
+            document.querySelector('.login-section').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
